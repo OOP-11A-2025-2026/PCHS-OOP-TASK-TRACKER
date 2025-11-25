@@ -34,7 +34,7 @@ public class ConsoleUI {
     }
 
     private void printWelcome() {
-        System.out.println("Task Manager Console UI (Darian)\nType 'help' for commands. Type 'exit' to quit.");
+        System.out.println("Task Manager Console UI \nType 'help' for commands. Type 'exit' to quit.");
     }
 
     private void handleCommand(String line) {
