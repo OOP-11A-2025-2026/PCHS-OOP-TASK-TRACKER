@@ -2,9 +2,12 @@ package TaskPackage;
 
 import java.util.List;
 import java.util.Scanner;
+
 public class ConsoleUI {
-    private final TaskRepository repository; 
+    private static final String DEFAULT_FILE = "tasks.txt";
+    private final TaskRepository repository;
     private final Scanner scanner = new Scanner(System.in);
+    private String activeFilePath = DEFAULT_FILE;
 
     public ConsoleUI(TaskRepository repository) {
         this.repository = repository;
@@ -55,6 +58,15 @@ public class ConsoleUI {
             case "delete":
                 cmdDelete(args);
                 break;
+            case "save":
+                cmdSave(args);
+                break;
+            case "load":
+                cmdLoad(args);
+                break;
+            case "file":
+                cmdFile(args);
+                break;
             default:
                 System.out.println("Unknown command. Type 'help' to see available commands.");
         }
@@ -69,6 +81,12 @@ public class ConsoleUI {
         System.out.println("  update <id> <field> <value>");
         System.out.println("    - update one field (title, description, category, status, owner)");
         System.out.println("  delete <id>");
+        System.out.println("  save [filePath]");
+        System.out.println("    - save current tasks to the specified .txt file (defaults to " + DEFAULT_FILE + ")");
+        System.out.println("  load [filePath]");
+        System.out.println("    - load tasks from file and replace current in-memory tasks");
+        System.out.println("  file [filePath]");
+        System.out.println("    - show or change the default file path used by save/load");
         System.out.println("  help");
         System.out.println("  exit | quit");
     }
@@ -213,5 +231,51 @@ public class ConsoleUI {
         boolean ok = repository.deleteTask(id);
         if (ok) System.out.println("Task deleted: " + id);
         else System.out.println("Task not found: " + id);
+    }
+
+    private void cmdSave(String args) {
+        if (!ensureRepository()) return;
+
+        String path = args.isEmpty() ? activeFilePath : args;
+        if (path.trim().isEmpty()) {
+            System.out.println("Usage: save [filePath]");
+            return;
+        }
+
+        TaskSaver saver = new TaskSaver(repository, path);
+        saver.save();
+        activeFilePath = path;
+    }
+
+    private void cmdLoad(String args) {
+        if (!ensureRepository()) return;
+
+        String path = args.isEmpty() ? activeFilePath : args;
+        if (path.trim().isEmpty()) {
+            System.out.println("Usage: load [filePath]");
+            return;
+        }
+
+        TaskLoader loader = new TaskLoader(repository, path);
+        loader.load();
+        activeFilePath = path;
+    }
+
+    private void cmdFile(String args) {
+        if (args.isEmpty()) {
+            System.out.println("Current default file: " + activeFilePath);
+            System.out.println("Usage: file <filePath> to change the default.");
+            return;
+        }
+        activeFilePath = args.trim();
+        System.out.println("Default file path updated to: " + activeFilePath);
+    }
+
+    private boolean ensureRepository() {
+        if (repository == null) {
+            System.out.println("Repository not available — operation not possible.");
+            return false;
+        }
+        return true;
     }
 }

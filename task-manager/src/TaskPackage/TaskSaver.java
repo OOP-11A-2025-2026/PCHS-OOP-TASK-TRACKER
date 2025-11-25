@@ -1,6 +1,7 @@
 package TaskPackage;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
@@ -18,7 +19,13 @@ public class TaskSaver {
     public void save() {
         List<Task> tasks = repository.getAllTasks();
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+        File targetFile = new File(filePath);
+        File parent = targetFile.getParentFile();
+        if (parent != null && !parent.exists()) {
+            parent.mkdirs();
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(targetFile))) {
 
             for (Task task : tasks) {
                 writer.write(formatTask(task));
