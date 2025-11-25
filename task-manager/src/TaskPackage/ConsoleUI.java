@@ -65,7 +65,7 @@ public class ConsoleUI {
         System.out.println("  add <title> | <description> | <category> | <owner>") ;
         System.out.println("    - create a task. Use '|' to separate fields. Category examples: SCHOOL, UNIVERSITY, SPORT, OTHER");
         System.out.println("  list");
-        System.out.println("    - list all tasks (requires repository implementation)");
+        System.out.println("    - list all tasks");
         System.out.println("  update <id> <field> <value>");
         System.out.println("    - update one field (title, description, category, status, owner)");
         System.out.println("  delete <id>");
