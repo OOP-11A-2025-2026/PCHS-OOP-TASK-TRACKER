@@ -84,10 +84,18 @@ public class Task {
         this.owner = owner;
     }
 
+    @Override
     public String toString() {
-        return "TaskPackage.Task{" + "id=" + id + ", title='" + title + '\'' + ", description='" + description + '\'' +
-                ", category=" + category + ", status=" + status + ", owner='" + owner + '\'' + '}';
+        return  "-------------------------\n" +
+                " Task ID: " + id + "\n" +
+                " Title: " + title + "\n" +
+                " Description: " + description + "\n" +
+                " Category: " + category + "\n" +
+                " Status: " + status + "\n" +
+                " Owner: " + owner + "\n" +
+                "-------------------------";
     }
+
 }
 
 
